@@ -1,5 +1,6 @@
 # TetrisCloneUnity
-**Source:** The Weekly Coder https://www.youtube.com/playlist?list=PLiRrp7UEG13axMHD7Kqdiy30c7ZBu_Zn7
+**Source:** The Weekly Coder https://www.youtube.com/playlist?list=PLiRrp7UEG13axMHD7Kqdiy30c7ZBu_Zn7 </br>
+**Unity Version:** 2020.1.2f1 </br>
 
 A little warm-up for my game development journey. </br>
 
