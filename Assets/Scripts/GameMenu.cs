@@ -11,13 +11,25 @@ public class GameMenu : MonoBehaviour
     public Text highScoreText2;
     public Text highScoreText3;
 
+    public Text LastScore;
+
     // Start is called before the first frame update
     void Start()
-    {
-        levelText.text = "0";
-        highScoreText.text = PlayerPrefs.GetInt("highscore").ToString();
-        highScoreText2.text = PlayerPrefs.GetInt("highscore2").ToString();
-        highScoreText3.text = PlayerPrefs.GetInt("highscore3").ToString();
+    {   
+        if(levelText != null)
+            levelText.text = "0";
+
+        if(highScoreText != null)
+            highScoreText.text = PlayerPrefs.GetInt("highscore").ToString();
+
+        if(highScoreText2 != null)
+            highScoreText2.text = PlayerPrefs.GetInt("highscore2").ToString();
+
+        if(highScoreText3 != null)
+            highScoreText3.text = PlayerPrefs.GetInt("highscore3").ToString();
+
+        if(LastScore != null)
+            LastScore.text = PlayerPrefs.GetInt("LastScore").ToString();
     }
 
     // Update is called once per frame
@@ -34,6 +46,11 @@ public class GameMenu : MonoBehaviour
             Game.startingAtLevelZero = false;
 
         SceneManager.LoadScene("Level");
+    }
+
+    public void QuitGame()
+    {
+        Application.Quit();
     }
 
     public void PlayAgain()

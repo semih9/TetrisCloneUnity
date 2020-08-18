@@ -206,7 +206,8 @@ public class Game : MonoBehaviour
         {
             PlayerPrefs.SetInt("highscore3", currentScore);
         }
-        
+
+        PlayerPrefs.SetInt("LastScore", currentScore);
     }
 
     public bool CheckIsAboveGrid(Tetromino tetromino)
