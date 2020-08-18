@@ -24,7 +24,7 @@ A little warm-up for my game development journey. </br>
 - [x] Part 16 - Extras(High Scores)
 - [x] Part 17 - Touch Input
 - [x] Part 18 - Pausing
-- [ ] **Part 19 - Game Over Score**
+- [x] Part 19 - Game Over Score
 - [ ] **Part 20 - Saving, Holding a Tetromino**
 - [ ] **Part 21 - Ghost Tetromino**
 
