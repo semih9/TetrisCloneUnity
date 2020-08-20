@@ -3,7 +3,9 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - current_active_tetromino
+  - current_saved_tetromino
   layers:
   - Default
   - TransparentFX

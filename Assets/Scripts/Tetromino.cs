@@ -293,6 +293,8 @@ public class Tetromino : MonoBehaviour
             Game.currentScore += individualScore;
 
             enabled = false;
+
+            tag = "Untagged";
         }
 
         fall = Time.time;

@@ -42,6 +42,7 @@ public class Game : MonoBehaviour
 
     private GameObject previewTetromino;
     private GameObject nextTetromino;
+    private GameObject savedTetromino;
 
     private bool gameStarted = false;
     private int startingHighScore;
@@ -49,6 +50,10 @@ public class Game : MonoBehaviour
     private int startingHighScore3;
 
     private Vector2 previewTetrominoPosition = new Vector2(-6.5f, 16);
+    private Vector2 savedTetrominoPosition = new Vector2(-6.5f, 10);
+
+    public int maxSwaps = 2;
+    public int currentSwaps = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -93,6 +98,11 @@ public class Game : MonoBehaviour
                 PauseGame();
             else
                 ResumeGame();
+        }
+        if (Input.GetKeyUp(KeyCode.Space))
+        {
+            GameObject tempNextTetromino = GameObject.FindGameObjectWithTag("current_active_tetromino");
+            SavedTetromino(tempNextTetromino.transform);
         }
     }
 
@@ -208,6 +218,21 @@ public class Game : MonoBehaviour
         }
 
         PlayerPrefs.SetInt("LastScore", currentScore);
+    }
+
+    bool CheckIsValidPosition(GameObject tetromino)
+    {
+        foreach (Transform mino in tetromino.transform)
+        {
+            Vector2 pos = Round(mino.position);
+            if (!CheckInsideGrid(pos))
+               return false;
+
+            if (GetTransformAtGridPosition(pos) != null && GetTransformAtGridPosition(pos).parent != tetromino.transform)
+                return false;
+        }
+
+        return true;
     }
 
     public bool CheckIsAboveGrid(Tetromino tetromino)
@@ -339,6 +364,8 @@ public class Game : MonoBehaviour
             nextTetromino = (GameObject)Instantiate(Resources.Load(GetRandomTetromino(), typeof(GameObject)), new Vector2(5.0f, 20.0f), Quaternion.identity);
             previewTetromino = (GameObject)Instantiate(Resources.Load(GetRandomTetromino(), typeof(GameObject)), previewTetrominoPosition, Quaternion.identity);
             previewTetromino.GetComponent<Tetromino>().enabled = false;
+
+            nextTetromino.tag = "current_active_tetromino";
         }
         else
         {
@@ -346,10 +373,58 @@ public class Game : MonoBehaviour
             nextTetromino = previewTetromino;
             nextTetromino.GetComponent<Tetromino>().enabled = true;
 
+            nextTetromino.tag = "current_active_tetromino";
+
             previewTetromino = (GameObject)Instantiate(Resources.Load(GetRandomTetromino(), typeof(GameObject)), previewTetrominoPosition, Quaternion.identity);
             previewTetromino.GetComponent<Tetromino>().enabled = false;
         }
-        
+
+        currentSwaps = 0;
+    }
+
+    public void SavedTetromino(Transform t)
+    {
+        currentSwaps++;
+        if (currentSwaps > maxSwaps)
+            return;
+
+        if(savedTetromino != null)
+        {
+            //there is a tetromino being held
+            GameObject tempSavedTetromino = GameObject.FindGameObjectWithTag("current_saved_tetromino");
+
+            tempSavedTetromino.transform.localPosition = new Vector2(gridWidth / 2, gridHeight);
+            if (!CheckIsValidPosition(tempSavedTetromino))
+            {
+                tempSavedTetromino.transform.localPosition = savedTetrominoPosition;
+                return;
+            }
+
+            savedTetromino = (GameObject)Instantiate(t.gameObject);
+            savedTetromino.GetComponent<Tetromino>().enabled = false;
+            savedTetromino.transform.localPosition = savedTetrominoPosition ;
+            savedTetromino.tag = "current_saved_tetromino";
+
+            nextTetromino = (GameObject)Instantiate(tempSavedTetromino);
+            nextTetromino.GetComponent<Tetromino>().enabled = true;
+            nextTetromino.transform.localPosition = new Vector2(gridWidth / 2, gridHeight);
+            nextTetromino.tag = "current_active_tetromino";
+
+            DestroyImmediate(t.gameObject);
+            DestroyImmediate(tempSavedTetromino);
+        }
+        else
+        {
+            //there is no tetromino being held
+            savedTetromino = (GameObject)Instantiate(GameObject.FindGameObjectWithTag("current_active_tetromino"));
+            savedTetromino.GetComponent<Tetromino>().enabled = false;
+            savedTetromino.transform.localPosition = savedTetrominoPosition;
+            savedTetromino.tag = "current_saved_tetromino";
+
+            DestroyImmediate(GameObject.FindGameObjectWithTag("current_active_tetromino"));
+
+            SpawnNextTetromino();
+        }
     }
 
     public bool CheckInsideGrid(Vector2 pos)
