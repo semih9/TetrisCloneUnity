@@ -43,6 +43,7 @@ public class Game : MonoBehaviour
     private GameObject previewTetromino;
     private GameObject nextTetromino;
     private GameObject savedTetromino;
+    private GameObject ghostTetromino;
 
     private bool gameStarted = false;
     private int startingHighScore;
@@ -99,7 +100,7 @@ public class Game : MonoBehaviour
             else
                 ResumeGame();
         }
-        if (Input.GetKeyUp(KeyCode.Space))
+        if (Input.GetKeyUp(KeyCode.LeftControl) || Input.GetKeyUp(KeyCode.RightControl))
         {
             GameObject tempNextTetromino = GameObject.FindGameObjectWithTag("current_active_tetromino");
             SavedTetromino(tempNextTetromino.transform);
@@ -366,6 +367,8 @@ public class Game : MonoBehaviour
             previewTetromino.GetComponent<Tetromino>().enabled = false;
 
             nextTetromino.tag = "current_active_tetromino";
+
+            SpawnGhostTetromino();
         }
         else
         {
@@ -377,9 +380,23 @@ public class Game : MonoBehaviour
 
             previewTetromino = (GameObject)Instantiate(Resources.Load(GetRandomTetromino(), typeof(GameObject)), previewTetrominoPosition, Quaternion.identity);
             previewTetromino.GetComponent<Tetromino>().enabled = false;
+
+            SpawnGhostTetromino();
         }
 
         currentSwaps = 0;
+    }
+
+    public void SpawnGhostTetromino()
+    {
+        if(GameObject.FindGameObjectsWithTag("current_ghost_tetromino") != null)
+            Destroy(GameObject.FindGameObjectWithTag("current_ghost_tetromino"));
+
+        ghostTetromino = (GameObject)Instantiate(nextTetromino, nextTetromino.transform.position, Quaternion.identity);
+
+        Destroy(ghostTetromino.GetComponent<Tetromino>());
+
+        ghostTetromino.AddComponent<GhostTetromino>();
     }
 
     public void SavedTetromino(Transform t)
@@ -412,6 +429,8 @@ public class Game : MonoBehaviour
 
             DestroyImmediate(t.gameObject);
             DestroyImmediate(tempSavedTetromino);
+
+            SpawnGhostTetromino();
         }
         else
         {

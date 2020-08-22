@@ -170,8 +170,42 @@ public class Tetromino : MonoBehaviour
             MoveDown();
         }
 
+        if (Input.GetKeyUp(KeyCode.Space))
+        {
+            SlamDown();
+        }
+
         #endif
 
+    }
+
+    public void SlamDown()
+    {
+        while (CheckIsValidPosition())
+        {
+            transform.position += new Vector3(0, -1, 0);
+        }
+
+        if (!CheckIsValidPosition())
+        {
+            transform.position += new Vector3(0, 1, 0);
+            FindObjectOfType<Game>().GridUpdate(this);
+        }
+
+        FindObjectOfType<Game>().DeleteRow();
+
+        if (FindObjectOfType<Game>().CheckIsAboveGrid(this))
+        {
+            FindObjectOfType<Game>().GameOver();
+        }
+        PlayLandAudio();
+        FindObjectOfType<Game>().SpawnNextTetromino();
+
+        Game.currentScore += individualScore;
+
+        enabled = false;
+
+        tag = "Untagged";
     }
 
     void MoveRight()
