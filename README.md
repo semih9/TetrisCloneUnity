@@ -30,4 +30,4 @@ A little warm-up for my game development journey. </br>
 - [x] Part 19 - Game Over Score
 - [x] Part 20 - Saving, Holding a Tetromino
 - [x] Part 21 - Ghost Tetromino
-
+- [ ] **Part 22 - Improvement of the Interface**
