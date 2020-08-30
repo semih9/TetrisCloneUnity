@@ -1,4 +1,7 @@
 # TetrisCloneUnity
+
+![Tetris Clone with Unity](https://i.hizliresim.com/kAsw7q.png)
+
 **Source:** The Weekly Coder https://www.youtube.com/playlist?list=PLiRrp7UEG13axMHD7Kqdiy30c7ZBu_Zn7 </br>
 **Unity Version:** 2020.1.2f1 </br>
 
